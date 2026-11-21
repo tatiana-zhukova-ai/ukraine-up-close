@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Ukraine, Up Close</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ===== Colours & type ===== */
+:root{
+  --navy:#14305e; --navy-2:#0d2347; --ink:#1b2433; --muted:#4a5568;
+  --blue:#1f4fd1; --blue-h:#173db0; --gold:#d6b25e; --gold-2:#c99a2e; --yellow:#f5c84b;
+  --card:#ffffff; --pad:clamp(18px,3.4vw,56px); --gap:clamp(16px,2.2vw,36px);
+  --serif:"Fraunces", Georgia, "Times New Roman", serif;
+  --sans:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --fade:.4s; --navh:58px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;background:#a9d6f5}
+body{font-size:clamp(16px,1.15vw,21px);line-height:1.42}
+img{display:block;max-width:100%}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--yellow);outline-offset:3px}
+
+/* ===== Shared field background (sections 2–8) ===== */
+#field{position:fixed;inset:0;z-index:0;background-color:#3f8fe0;background-size:auto 112%;background-repeat:no-repeat;background-position:50% 100%;transition:background-position 1.2s ease}
+@media (max-aspect-ratio:16/10){#field{background-size:cover}}
+
+/* ===== Section frame ===== */
+.slide{position:relative;z-index:1;min-height:100vh;padding:calc(var(--pad) * .8) var(--pad) calc(var(--navh) + var(--pad) * .6);display:flex;flex-direction:column}
+.head{align-self:flex-start;margin:calc(-1 * clamp(6px,.6vw,12px)) 0 clamp(8px,1.2vw,22px) calc(-1 * clamp(30px,3vw,56px));padding:clamp(10px,1vw,18px) clamp(50px,5vw,90px) clamp(10px,1vw,18px) clamp(30px,3vw,56px);border-radius:28px;background:radial-gradient(closest-side,rgba(255,255,255,.85),rgba(255,255,255,.62) 62%,rgba(255,255,255,0) 100%)}
+.kicker{font:700 .74em/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--navy);display:flex;align-items:center;gap:.7em;margin:0 0 .45em;text-shadow:0 0 14px rgba(255,255,255,.9)}
+.kicker::before{content:"";width:2.4em;height:4px;border-radius:2px;background:linear-gradient(90deg,var(--blue) 50%,var(--yellow) 50%)}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:700;margin:0;letter-spacing:-.01em;color:var(--navy)}
+h2.topic{font-size:clamp(32px,3.6vw,64px);line-height:1.02;text-shadow:0 0 18px rgba(255,255,255,.95),0 0 36px rgba(255,255,255,.7)}
+.sub{margin:.3em 0 0;font-weight:600;color:var(--navy);text-shadow:0 0 12px rgba(255,255,255,.95)}
+
+/* ===== Cards ===== */
+.row{display:grid;grid-template-columns:repeat(var(--cols,3),minmax(0,1fr));gap:var(--gap);align-items:stretch}
+.card{display:flex;flex-direction:column;background:var(--card);border:1.5px solid var(--gold);border-radius:12px;box-shadow:0 10px 28px rgba(20,48,94,.18),0 2px 6px rgba(20,48,94,.10);overflow:hidden;min-width:0}
+.card .ph{position:relative;height:var(--imgh,min(37vh,calc((100vw - 2*var(--pad) - 2*var(--gap))/3*.72)));background:#f3eee2;overflow:hidden}
+.card .ph img{width:100%;height:100%;object-fit:cover;cursor:zoom-in;transition:transform .5s ease}
+.card .ph img.contain{object-fit:contain;background:#f6f1e4}
+.card .ph:hover img{transform:scale(1.025)}
+.cap{flex:1;display:flex;flex-direction:column;align-items:flex-start;padding:clamp(12px,1.2vw,20px) clamp(14px,1.4vw,22px) clamp(14px,1.3vw,20px);background:#fff}
+.cap h3{font-size:clamp(20px,1.55vw,30px);line-height:1.1}
+.cap p{margin:.35em 0 0;color:var(--ink);font-size:.93em}
+.tag{display:inline-block;font:700 .66em/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;background:var(--yellow);color:var(--navy-2);padding:.45em .6em;border-radius:4px;margin-bottom:.5em}
+.tag.blue{background:var(--blue);color:#fff}
+.btn{display:inline-flex;align-items:center;gap:.55em;border:0;border-radius:999px;padding:.66em 1.15em;background:var(--blue);color:#fff;font-weight:700;font-size:.88em;text-decoration:none;margin-top:auto;box-shadow:0 4px 12px rgba(31,79,209,.3)}
+.cap p + .btn{margin-top:.8em}
+.btn:hover{background:var(--blue-h)}
+.btn .play{width:0;height:0;border-left:.72em solid #fff;border-top:.44em solid transparent;border-bottom:.44em solid transparent}
+.notice{position:absolute;inset:0;display:none;align-items:center;justify-content:center;text-align:center;padding:1em;font-size:.85em;color:#7a2a12;background:#fff4e8;border:2px dashed #e0a36b}
+.ph.is-missing .notice{display:flex}
+.ph.is-missing img{display:none}
+
+/* athlete graphic when no photo */
+.sportart{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:radial-gradient(circle at 30% 25%,#2e63e6,#14305e 70%)}
+.sportart svg{width:46%;height:auto;max-height:70%}
+.sportart .ini{position:absolute;right:6%;bottom:6%;font:700 clamp(28px,3vw,54px)/1 var(--serif);color:var(--yellow);opacity:.95}
+.ph.use-art .sportart{display:flex}
+.ph.use-art img,.ph.use-art .notice{display:none}
+
+/* section 8: smaller images to leave room for the cartoon block */
+#s8{--imgh:min(25vh,calc((100vw - 2*var(--pad) - 2*var(--gap))/3*.6))}
+.extra{display:flex;gap:.9em;align-items:center;margin-top:.9em;padding:.7em;border:1.5px solid var(--gold);border-radius:10px;background:#fffdf6;width:100%}
+.extra .mini{position:relative;width:38%;flex:none;aspect-ratio:16/9;border-radius:6px;overflow:hidden;background:#f3eee2}
+.extra .mini img{width:100%;height:100%;object-fit:cover;cursor:zoom-in}
+.extra h4{font-size:.92em;line-height:1.15}
+.extra p{margin:.25em 0 0;font-size:.8em}
+.extra .btn{margin-top:.5em;font-size:.78em;padding:.5em .9em}
+
+/* ===== 1: title + map ===== */
+#s1{padding:0;overflow:hidden;background:#a9d6f5}
+#s1 .herobg{position:absolute;inset:-2%;background-size:cover;background-position:50% 85%;animation:kenburns 40s ease-in-out infinite alternate}
+@keyframes kenburns{from{transform:scale(1)}to{transform:scale(1.08)}}
+#s1 .titlebox{position:relative;z-index:2;margin:clamp(30px,7vh,100px) 0 0 clamp(24px,6vw,110px);max-width:min(900px,92vw);padding:clamp(40px,4vw,70px) clamp(60px,6vw,110px);margin-left:clamp(0px,2vw,40px);border-radius:40px;background:radial-gradient(closest-side,rgba(255,255,255,.82),rgba(255,255,255,.6) 62%,rgba(255,255,255,0) 100%)}
+#s1 .kicker{font-size:clamp(13px,1vw,18px)}
+#s1 h1{font-size:clamp(52px,7.4vw,138px);line-height:.95;color:var(--navy)}
+#s1 .by{margin:.55em 0 0;font:600 clamp(18px,1.6vw,30px)/1.2 var(--sans);color:var(--navy-2)}
+#s1 .btn.big{margin-top:1.1em;font-size:clamp(17px,1.3vw,24px);padding:.75em 1.4em}
+.mapstage{position:absolute;inset:0;z-index:3;background:#dfeaf6;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .7s ease,visibility 0s linear .7s}
+#s1.map-on .mapstage{opacity:1;visibility:visible;transition:opacity .7s ease}
+#s1.map-on .titlebox{visibility:hidden}
+.mapview{position:relative;width:min(100vw,calc((100vh - var(--navh)) * 1547 / 1041));aspect-ratio:1547/1041;overflow:hidden}
+.mapzoom{position:absolute;inset:0;transform-origin:65.6% 19.8%;transition:transform 2.4s cubic-bezier(.25,.7,.2,1)}
+.mapzoom img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill}
+.mapzoom .msumy{opacity:0;transition:opacity 1s ease}
+#s1.hl .msumy{opacity:1}
+#s1.zoom .mapzoom{transform:scale(2.3)}
+.rlabels span{position:absolute;transform:translate(-50%,-50%);font:700 clamp(9px,.82vw,15px)/1 var(--sans);color:#14305e;background:rgba(255,255,255,.88);padding:.28em .45em;border-radius:4px;white-space:nowrap;transition:opacity .8s ease}
+#s1.hl .rlabels span{opacity:.5}
+#s1.zoom .rlabels span{opacity:0}
+.sumylabel{position:absolute;left:65.6%;top:19.8%;transform:translate(-50%,-50%) scale(.9);font:700 clamp(18px,1.9vw,36px)/1 var(--serif);background:var(--yellow);color:var(--navy-2);padding:.35em .6em;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,.2);opacity:0;transition:opacity .8s ease,transform .8s ease;z-index:2}
+#s1.named .sumylabel{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.mapnote{position:absolute;left:12px;bottom:calc(var(--navh) + 8px);font-size:12px;color:#33445f;background:rgba(255,255,255,.8);padding:3px 8px;border-radius:4px}
+.mapnext{position:absolute;right:clamp(16px,3vw,48px);bottom:calc(var(--navh) + 18px);opacity:0;transition:opacity .6s}
+#s1.named .mapnext{opacity:1}
+.mapstage .notice{z-index:4}
+.mapview.is-missing .notice{display:flex}
+
+/* ===== 9: thank you ===== */
+#s9{justify-content:flex-end;padding-bottom:calc(var(--navh) + var(--pad))}
+#s9 .bg{position:absolute;inset:0;overflow:hidden;background:#1d3550}
+#s9 .bg img{width:100%;height:100%;object-fit:cover;cursor:zoom-in}
+#s9 .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,35,71,0) 35%,rgba(13,35,71,.82) 100%);pointer-events:none}
+#s9 .inner{position:relative;max-width:920px;color:#fff}
+#s9 .kicker{color:var(--yellow);text-shadow:none}
+#s9 h2{color:#fff;font-size:clamp(46px,6vw,112px);text-shadow:0 2px 18px rgba(0,0,0,.35)}
+#s9 .closing{font-size:1.3em;margin:.4em 0;text-shadow:0 1px 10px rgba(0,0,0,.45)}
+#s9 .q{display:inline-block;margin-top:.5em;font:700 1.1em/1 var(--sans);background:var(--yellow);color:var(--navy-2);padding:.5em .8em;border-radius:6px}
+
+/* ===== Navigation bar & panels ===== */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:20;height:var(--navh);display:flex;align-items:center;gap:10px;padding:0 16px;background:rgba(255,255,255,.9);backdrop-filter:blur(8px);border-top:1px solid #e3d6b0;font-size:15px}
+.bar button{border:0;background:#fff;color:var(--navy);border-radius:999px;padding:8px 14px;font-weight:700;box-shadow:0 0 0 1px #d9c99a}
+.bar button:hover{background:var(--navy);color:#fff}
+.bar .count{font-variant-numeric:tabular-nums;font-weight:700;color:var(--navy);min-width:4.5em;text-align:center}
+.dots{display:flex;gap:7px;flex:1;justify-content:center}
+.dots button{width:10px;height:10px;padding:0;border-radius:50%;background:#d9c99a;box-shadow:none}
+.dots button[aria-current="true"]{background:var(--blue);transform:scale(1.35)}
+.panel{position:fixed;z-index:30;bottom:calc(var(--navh) + 6px);background:#fff;border-radius:12px;box-shadow:0 18px 50px rgba(20,48,94,.28);padding:14px;display:none;max-height:72vh;overflow:auto;font-size:15px}
+.panel.open{display:block}
+#menu{left:16px;width:min(340px,92vw)}
+#menu ol{margin:0;padding:0;list-style:none;counter-reset:m}
+#menu li button{width:100%;text-align:left;border:0;background:none;padding:8px 10px;border-radius:6px;display:flex;gap:.6em;color:var(--ink)}
+#menu li button::before{counter-increment:m;content:counter(m,decimal-leading-zero);color:var(--blue);font-weight:700}
+#menu li button:hover,#menu li button[aria-current="true"]{background:#f4efe1}
+#sources{right:16px;width:min(620px,94vw)}
+#sources h4{margin:12px 0 4px;font:700 14px/1.2 var(--sans);color:var(--blue)}
+#sources ul{margin:0;padding-left:18px} #sources li{margin:3px 0;font-size:13px}
+#sources a{color:var(--blue)}
+
+/* ===== Overlays ===== */
+.overlay{position:fixed;inset:0;z-index:50;background:rgba(7,14,28,.9);display:none;align-items:center;justify-content:center;flex-direction:column;padding:20px;color:#fff}
+.overlay.open{display:flex}
+.overlay .close{position:absolute;top:14px;right:14px;border:0;background:#fff;color:var(--navy);border-radius:999px;padding:9px 18px;font-weight:700;z-index:2}
+#lb img{max-width:92vw;max-height:76vh;object-fit:contain;border-radius:8px;background:#fff}
+#lb .lbcap{margin-top:14px;max-width:900px;text-align:center}
+#lb .lbcap b{display:block;font:700 1.25em/1.2 var(--serif)}
+#lb .lbcap span{color:#dbe3f2}
+#vid .frame{position:relative;width:min(1280px,92vw,calc((100vh - 170px) * 16 / 9));aspect-ratio:16/9;background:#000;border-radius:10px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+#vid .frame iframe,#vid .frame>div{position:absolute;inset:0;width:100%;height:100%;border:0}
+#vid .msg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:2em;font-size:18px;line-height:1.5}
+#vid .vinfo{width:min(1280px,92vw);margin-top:12px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;font-size:15px;color:#dfe5f1}
+#vid .vinfo a{color:var(--yellow);font-weight:700}
+#vid .vinfo button{border:1px solid #6b7a96;background:transparent;color:#dfe5f1;border-radius:999px;padding:5px 12px;font-size:13px}
+#clipEd{display:none;width:min(1280px,92vw);margin-top:10px;padding:10px 12px;border:1px solid #4d5b78;border-radius:10px;background:#101b31;font-size:14px;gap:8px;flex-wrap:wrap;align-items:center}
+#clipEd.open{display:flex}
+#clipEd button{border:0;border-radius:999px;padding:6px 12px;background:#e9eef8;color:#14305e;font-weight:700}
+#clipEd .st{margin-left:auto;color:#9fb0cf}
+
+/* file:// warning */
+#fileWarn{display:none;position:fixed;top:0;left:0;right:0;z-index:40;background:#fff1c7;color:#5b3d00;padding:8px 14px;font-size:14px;text-align:center;border-bottom:1px solid #e3c36b}
+
+/* ===== Deck mode (computer): one section at a time ===== */
+body.deck{overflow:hidden;height:100vh}
+body.deck .slide{position:fixed;inset:0;height:100vh;overflow:auto;opacity:0;visibility:hidden;transition:opacity var(--fade) ease,visibility 0s linear var(--fade)}
+body.deck .slide.active{opacity:1;visibility:visible;transition:opacity var(--fade) ease}
+
+/* ===== Phones / narrow screens: vertical scrolling ===== */
+@media (max-width:899px), (max-height:559px){
+  .row{grid-template-columns:1fr !important}
+  .card .ph,#s8 .card .ph{height:auto;aspect-ratio:4/3}
+  .slide{min-height:auto}
+  #s1{min-height:100vh}
+  #s1 .mapstage{position:relative;opacity:1;visibility:visible;margin-top:24px;background:transparent}
+  #s1.map-on .titlebox{visibility:visible}
+  .mapnext,.mapnote{display:none}
+  .sumylabel{opacity:1}
+  #s9{min-height:100vh}
+  .dots{display:none}
+  .bar .label{display:none}
+}
+@media (prefers-reduced-motion: reduce){
+  *{transition:none !important;animation:none !important}
+}
+</style>
+</head>
+<body>
+<div id="field" aria-hidden="true"></div>
+<div id="fileWarn">This page was opened as a file. YouTube videos play only when the presentation is opened from its web link.</div>
+
+<!-- ============ 1 · International Awareness ============ -->
+<section class="slide" id="s1" data-title="International Awareness">
+  <div class="herobg" id="heroBg" aria-hidden="true"></div>
+  <div class="titlebox">
+    <p class="kicker">International Awareness</p>
+    <h1>Ukraine,<br>Up Close</h1>
+    <p class="by">Presented by Tetiana Zhukova</p>
+    <button class="btn big" id="explore">Explore Ukraine →</button>
+  </div>
+  <div class="mapstage" aria-label="Map of Ukraine">
+    <div class="mapview" id="mapview">
+      <div class="mapzoom">
+        <img class="mregions" id="mapRegions" alt="Map of Ukraine with its regions, within internationally recognised borders, including Crimea">
+        <img class="msumy" id="mapSumy" alt="Map of Ukraine with the Sumy Region highlighted">
+        <div class="rlabels" id="rlabels"></div>
+        <span class="sumylabel">Sumy Region</span>
+      </div>
+      <div class="notice">Map files missing:<br><b>images/map-regions.png, images/map-sumy.png</b></div>
+    </div>
+    <span class="mapnote">Ukraine · internationally recognised borders</span>
+    <button class="btn mapnext" data-go="next">Cultural Heritage →</button>
+  </div>
+</section>
+
+<!-- ============ 2 · Cultural Heritage ============ -->
+<section class="slide" id="s2" data-title="Cultural Heritage" data-bg="20% 100%">
+  <div class="head"><p class="kicker">Cultural Heritage</p><h2 class="topic">Cultural Heritage</h2></div>
+  <div class="row">
+    <article class="card">
+      <div class="ph"><img data-img="krolevets"><div class="notice"></div></div>
+      <div class="cap"><span class="tag blue">Sumy Region</span><h3>Krolevets Weaving</h3>
+        <p>In Krolevets, people weave red and white towels with special patterns. These woven towels are called rushnyky.</p>
+        <button class="btn" data-video="weaver"><span class="play"></span>Watch the Weaver</button></div>
+    </article>
+    <article class="card">
+      <div class="ph"><img data-img="pottery"><div class="notice"></div></div>
+      <div class="cap"><h3>Pottery</h3>
+        <p>Ukrainian potters make jugs, bowls and pots from clay. They often paint them with bright patterns.</p></div>
+    </article>
+    <article class="card">
+      <div class="ph"><img data-img="pysanky"><div class="notice"></div></div>
+      <div class="cap"><h3>Pysanka</h3>
+        <p>People decorate Easter eggs with wax and dyes. Every pattern has its own meaning.</p></div>
+    </article>
+  </div>
+</section>
+
+<!-- ============ 3 · Historic Places and Events ============ -->
+<section class="slide" id="s3" data-title="Historic Places and Events" data-bg="45% 100%">
+  <div class="head"><p class="kicker">Historic Places and Events</p><h2 class="topic">Historic Places and Events</h2><p class="sub">From Konotop to Baturyn</p></div>
+  <div class="row">
+    <article class="card">
+      <div class="ph"><img data-img="konotop"><div class="notice"></div></div>
+      <div class="cap"><span class="tag blue">Konotop · Sumy Region</span><h3>The Battle of Konotop, 1659</h3>
+        <p>In 1659, the Cossack army of Hetman Ivan Vyhovsky and their Crimean Tatar allies defeated the army of the Muscovite tsar near Konotop.</p></div>
+    </article>
+    <article class="card">
+      <div class="ph"><img data-img="baturyn"><div class="notice"></div></div>
+      <div class="cap"><span class="tag">Baturyn · Chernihiv Region</span><h3>Baturyn Citadel</h3>
+        <p>Baturyn was the hetmans’ capital. In 1708, Peter I’s troops destroyed the town and killed thousands of people (estimates: about 9,000–15,000). Today’s citadel is a reconstruction.</p></div>
+    </article>
+    <article class="card">
+      <div class="ph"><img data-img="palace"><div class="notice"></div></div>
+      <div class="cap"><span class="tag">Baturyn · Chernihiv Region</span><h3>Kyrylo Rozumovsky’s Palace</h3>
+        <p>This is the palace of Kyrylo Rozumovsky, the last hetman of Cossack Ukraine. It was built in 1799–1803 to a design by the Scottish architect Charles Cameron.</p>
+        <button class="btn" data-video="palace"><span class="play"></span>Watch the Palace</button></div>
+    </article>
+  </div>
+</section>
+
+<!-- ============ 4 · Local and National Traditions ============ -->
+<section class="slide" id="s4" data-title="Local and National Traditions" data-bg="70% 100%">
+  <div class="head"><p class="kicker">Local and National Traditions</p><h2 class="topic">Local and National Traditions</h2></div>
+  <div class="row">
+    <article class="card">
+      <div class="ph"><img data-img="carols"><div class="notice"></div></div>
+      <div class="cap"><h3>Christmas Carol Singing</h3>
+        <p>At Christmas, carol singers go from house to house with a star and sing traditional songs.</p>
+        <button class="btn" data-video="carols"><span class="play"></span>Watch the Carol Singing</button></div>
+    </article>
+    <article class="card">
+      <div class="ph"><img data-img="korovai"><div class="notice"></div></div>
+      <div class="cap"><h3>Korovai</h3>
+        <p>Korovai is a traditional Ukrainian decorated bread, a symbol of hospitality and celebration.</p></div>
+    </article>
+    <article class="card">
+      <div class="ph"><img data-img="pentecost"><div class="notice"></div></div>
+      <div class="cap"><h3>Green Holidays — Pentecost</h3>
+        <p>At Pentecost, people decorate their homes with fresh green branches and maple leaves. They also put fragrant grass on the floor.</p></div>
+    </article>
+  </div>
+</section>
+
+<!-- ============ 5 · Ukrainian Folk Heritage ============ -->
+<section class="slide" id="s5" data-title="Ukrainian Folk Heritage" data-bg="30% 100%">
+  <div class="head"><p class="kicker">Ukrainian Folk Heritage</p><h2 class="topic">Ukrainian Folk Heritage</h2></div>
+  <div class="row">
+    <article class="card">
+      <div class="ph"><img data-img="dog"><div class="notice"></div></div>
+      <div class="cap"><h3>Once Upon a Dog</h3>
+        <p>A Soviet cartoon (Soyuzmultfilm, 1982) by Eduard Nazarov. It is based on the Ukrainian folk tale ‘Sirko’, and we hear Ukrainian folk songs in it.</p>
+        <button class="btn" data-video="dog"><span class="play"></span>Watch the Wedding Scene</button></div>
+    </article>
+    <article class="card">
+      <div class="ph"><img data-img="mavka"><div class="notice"></div></div>
+      <div class="cap"><h3>Mavka</h3>
+        <p>Mavka is a forest spirit from Ukrainian folklore. She is the heroine of ‘The Forest Song’ by Lesya Ukrainka.</p></div>
+    </article>
+    <article class="card">
+      <div class="ph"><img data-img="hopak"><div class="notice"></div></div>
+      <div class="cap"><h3>Hopak</h3>
+        <p>Hopak is a lively Ukrainian dance with high jumps. The Virsky Ensemble performs it in national costumes.</p>
+        <button class="btn" data-video="hopak"><span class="play"></span>Watch the Hopak</button></div>
+    </article>
+  </div>
+</section>
+
+<!-- ============ 6 · Education in Ukraine ============ -->
+<section class="slide" id="s6" data-title="Education in Ukraine" data-bg="60% 100%">
+  <div class="head"><p class="kicker">Education in Ukraine</p><h2 class="topic">Education in Ukraine</h2></div>
+  <div class="row">
+    <article class="card">
+      <div class="ph"><img data-img="bell"><div class="notice"></div></div>
+      <div class="cap"><h3>Primary School</h3>
+        <p>Children usually start school at six. At the First Bell and the Last Bell, a senior student often carries a first-year pupil, who rings a bell.</p></div>
+    </article>
+    <article class="card">
+      <div class="ph"><img data-img="waltz"><div class="notice"></div></div>
+      <div class="cap"><h3>Secondary School</h3>
+        <p>At the end of secondary school, graduates celebrate. They often dance a waltz for their families and teachers.</p></div>
+    </article>
+    <article class="card">
+      <div class="ph"><img data-img="sumdu"><div class="notice"></div></div>
+      <div class="cap"><span class="tag blue">Sumy</span><h3>University</h3>
+        <p>After school, many students go to university. This is Sumy State University.</p></div>
+    </article>
+  </div>
+</section>
+
+<!-- ============ 7 · Music and Musical Instruments ============ -->
+<section class="slide" id="s7" data-title="Music and Musical Instruments" data-bg="85% 100%" style="--cols:2">
+  <div class="head"><p class="kicker">Music and Musical Instruments</p><h2 class="topic">Music and Musical Instruments</h2></div>
+  <div class="row" style="--cols:2;max-width:1500px;width:100%;margin:0 auto">
+    <article class="card">
+      <div class="ph" style="--imgh:min(42vh,26vw)"><img data-img="shchedryk"><div class="notice"></div></div>
+      <div class="cap"><h3>Shchedryk</h3>
+        <p>Shchedryk is a traditional Ukrainian New Year’s song. Its melody became famous around the world as ‘Carol of the Bells’.</p>
+        <button class="btn" data-video="shchedryk"><span class="play"></span>Play the Full Performance</button></div>
+    </article>
+    <article class="card">
+      <div class="ph" style="--imgh:min(42vh,26vw)"><img data-img="bandura"><div class="notice"></div></div>
+      <div class="cap"><h3>The Bandura</h3>
+        <p>The bandura is a traditional Ukrainian string instrument. Musicians pluck the strings with their fingers.</p>
+        <p style="font-size:.82em;color:#4a5568">Lvivyanky Bandura Ensemble — Pro ridnyi Lviv (About Our Native Lviv).</p>
+        <button class="btn" data-video="bandura"><span class="play"></span>Hear the Bandura</button></div>
+    </article>
+  </div>
+</section>
+
+<!-- ============ 8 · Sporting Culture ============ -->
+<section class="slide" id="s8" data-title="Sporting Culture" data-bg="10% 100%">
+  <div class="head"><p class="kicker">Sporting Culture</p><h2 class="topic">Sporting Culture</h2><p class="sub">Famous Ukrainian Athletes</p></div>
+  <div class="row">
+    <article class="card">
+      <div class="ph"><img data-img="usyk"><div class="notice"></div><div class="sportart" data-art="boxing" data-ini="OU"></div></div>
+      <div class="cap"><span class="tag">Boxing</span><h3>Oleksandr Usyk</h3>
+        <p>Olympic champion in 2012. He became the undisputed heavyweight world champion in 2024.</p></div>
+    </article>
+    <article class="card">
+      <div class="ph"><img data-img="bubka"><div class="notice"></div><div class="sportart" data-art="pole" data-ini="SB"></div></div>
+      <div class="cap"><span class="tag">Pole Vault</span><h3>Serhiy Bubka</h3>
+        <p>Olympic champion in 1988. In 1985, he was the first person to clear six metres.</p></div>
+    </article>
+    <article class="card">
+      <div class="ph"><img data-img="shevchenko"><div class="notice"></div><div class="sportart" data-art="football" data-ini="AS"></div></div>
+      <div class="cap"><span class="tag">Football</span><h3>Andriy Shevchenko</h3>
+        <p>He won the Champions League with AC Milan in 2003 and the Ballon d’Or in 2004.</p>
+        <div class="extra">
+          <div class="mini"><img data-img="cossacks"></div>
+          <div><h4>How the Cossacks Played Football (1970)</h4>
+            <p>A funny Ukrainian cartoon: three Cossacks travel across Europe and play football.</p>
+            <button class="btn" data-video="cossacks"><span class="play"></span>Watch a Short Clip</button></div>
+        </div></div>
+    </article>
+  </div>
+</section>
+
+<!-- ============ 9 · Thank You ============ -->
+<section class="slide" id="s9" data-title="Thank You">
+  <div class="bg"><img data-img="river"></div>
+  <div class="shade"></div>
+  <div class="inner">
+    <p class="kicker">Thank You</p>
+    <h2>Thank You</h2>
+    <p class="closing">From local crafts to music and sport, Ukraine has many stories to share. Thank you for exploring Ukraine with me.</p>
+    <span class="q">Any questions?</span>
+  </div>
+</section>
+
+<!-- ============ Navigation ============ -->
+<nav class="bar" aria-label="Presentation navigation">
+  <button id="menuBtn" aria-expanded="false" aria-controls="menu">☰ <span class="label">Topics</span></button>
+  <button id="prev" aria-label="Previous">←</button>
+  <span class="count" id="count" aria-live="polite">1 / 9</span>
+  <button id="next" aria-label="Next">→</button>
+  <div class="dots" id="dots"></div>
+  <button id="srcBtn" aria-expanded="false" aria-controls="sources">Sources</button>
+  <button id="fsBtn" aria-label="Full screen">⛶ <span class="label">Full screen</span></button>
+</nav>
+<div class="panel" id="menu"><ol id="menuList"></ol></div>
+<div class="panel" id="sources" aria-label="Sources"></div>
+
+<div class="overlay" id="lb" role="dialog" aria-modal="true" aria-label="Enlarged photo">
+  <button class="close" data-close>Close ✕</button>
+  <img alt=""><p class="lbcap"></p>
+</div>
+<div class="overlay" id="vid" role="dialog" aria-modal="true" aria-label="Video player">
+  <button class="close" data-close>Close ✕</button>
+  <div class="frame"></div>
+  <div class="vinfo"><span class="vtitle"></span><span><a class="vlink" target="_blank" rel="noopener">Open on YouTube ↗</a></span></div>
+  <div id="clipEd">
+    <button id="cStart">Start = now</button><button id="cEnd">End = now</button><button id="cTest">▶ Test clip</button><button id="cSave">Save</button><button id="cReset">Reset</button>
+    <span class="st" id="cInfo"></span>
+  </div>
+</div>
+
+<script>
+/* =====================================================================
+   1. IMAGES — files in the "images" folder (START.bat downloads them).
+   For each picture the first file that exists is used.
+   pos = which part of the photo stays visible ("50% 20%" = keep the top).
+   ===================================================================== */
+const IMAGES = {
+  krolevets: { title:"Krolevets Weaving", text:"Red and white woven towels from Krolevets.", pos:"50% 50%",
+    files:["images/krolevets-illustration.jpg"] },
+  pottery:   { title:"Pottery", text:"Painted Ukrainian jugs, bowls and pots.", pos:"50% 60%",
+    files:["images/pottery-illustration.jpg"] },
+  pysanky:   { title:"Pysanka", text:"Traditional Ukrainian Easter eggs.", pos:"50% 50%",
+    files:["images/pysanky-illustration.jpg"] },
+  konotop:   { title:"The Battle of Konotop, 1659", text:"A scheme of the battle near Konotop.", pos:"50% 50%", fit:"contain",
+    files:["images/konotop-scheme.jpg"] },
+  baturyn:   { title:"Baturyn Citadel", text:"The reconstructed wooden citadel in Baturyn.", pos:"50% 60%",
+    files:["images/baturyn-citadel.jpg"] },
+  palace:    { title:"Kyrylo Rozumovsky’s Palace", text:"The palace in Baturyn, designed by Charles Cameron.", pos:"50% 55%",
+    files:["images/rozumovsky-palace.jpg"] },
+  carols:    { title:"Christmas Carol Singing", text:"Carol singers with stars in the snow.", pos:"50% 30%",
+    files:["images/carols.jpg"] },
+  korovai:   { title:"Korovai", text:"A girl in a flower wreath holds a korovai on an embroidered towel.", pos:"50% 0%",
+    files:["images/korovai.jpg"] },
+  pentecost: { title:"Green Holidays — Pentecost", text:"A Ukrainian home decorated with green branches.", pos:"50% 50%",
+    files:["images/pentecost.jpg"] },
+  dog:       { title:"Once Upon a Dog", text:"The wedding feast before the song.", pos:"50% 45%",
+    files:["images/dog-wedding.jpg"] },
+  mavka:     { title:"Mavka", text:"Mavka — right panel of a triptych by Sofiia Karaffa-Korbut.", pos:"50% 50%", fit:"contain",
+    files:["images/mavka.jpg"] },
+  hopak:     { title:"Hopak", text:"Hopak danced by the Virsky Ensemble.", pos:"50% 35%",
+    files:["images/hopak.jpg"] },
+  bell:      { title:"Primary School", text:"A senior student carries a first-year pupil who holds a big bell.", pos:"50% 20%",
+    files:["images/first-last-bell.jpg"] },
+  waltz:     { title:"Secondary School", text:"Graduates dance a waltz.", pos:"50% 40%",
+    files:["images/graduation-waltz.jpg"] },
+  sumdu:     { title:"University", text:"Sumy State University.", pos:"50% 50%",
+    files:["images/sumdu.jpg"] },
+  shchedryk: { title:"Shchedryk", text:"A traditional Ukrainian New Year’s song.", pos:"50% 50%",
+    files:["images/yt-shchedryk.jpg"] },
+  bandura:   { title:"The Bandura", text:"Bandura players.", pos:"50% 35%",
+    files:["images/bandura.jpg"] },
+  usyk:      { title:"Oleksandr Usyk", text:"In hetman-style clothes before a fight.", pos:"50% 0%", art:true, files:["images/usyk.jpg"] },
+  bubka:     { title:"Serhiy Bubka", text:"Pole vault.", pos:"50% 15%", art:true, files:["images/bubka.jpg"] },
+  shevchenko:{ title:"Andriy Shevchenko", text:"Football, in the Ukraine national team kit.", pos:"50% 8%", art:true, files:["images/shevchenko.jpg"] },
+  cossacks:  { title:"How the Cossacks Played Football (1970)", text:"A Ukrainian cartoon.", pos:"50% 50%",
+    files:["images/yt-cossacks.jpg"] },
+  river:     { title:"Thank You", text:"A river landscape in the Sumy Region.", pos:"50% 60%",
+    files:["images/psel.jpg"] },
+  hero:      { files:["images/field.jpg","images/hero-field.jpg"] },
+  field:     { files:["images/field.jpg","images/field-background.jpg"] }
+};
+
+/* =====================================================================
+   2. VIDEOS — start/end in seconds. null = not chosen yet.
+   Clips can also be set inside the player with "✂ Edit clip" (saved to clips.json).
+   Clips without an approved start/end play the whole video (nothing is cut automatically).
+   ===================================================================== */
+const LIMIT = null;   // no automatic cut: a clip plays from its start until you set an end
+const CLIPS = {
+  weaver:   { title:"Krolevets weaving — Suspilne Sumy (2025)", id:"jfE9TMHPwgg", start:null, end:null },
+  palace:   { title:"Kyrylo Rozumovsky’s Palace", id:"ARrqlZ-s1AI", start:1221, end:null },
+  carols:   { title:"Carol singing — Evenings on a Farm near Dikanka (1961)", id:"YrsqKUD3Be8", start:null, end:null },
+  dog:      { title:"Once Upon a Dog — the wedding scene", id:"yTAB18eG4a8", start:null, end:null },
+  hopak:    { title:"Hopak — Pavlo Virsky Ensemble", id:"p7gTiA4ErkI", start:null, end:null },
+  shchedryk:{ title:"Shchedryk", id:"TPhDRMr6ttM", start:null, end:null, full:true },
+  bandura:  { title:"Lvivyanky Bandura Ensemble — Pro ridnyi Lviv (About Our Native Lviv)", id:"i4BppNUJ9vQ", start:null, end:null },
+  cossacks: { title:"How the Cossacks Played Football (1970)", id:"vuqTBP8HBMw", start:null, end:null }
+};
+
+/* 3. CREDITS for the Sources panel (keyed by file) */
+const CM = n => "https://commons.wikimedia.org/wiki/File:" + encodeURIComponent(n.replace(/ /g,"_"));
+const CREDITS = {
+  "images/map-regions.png":["Map of regions: based on a Wikimedia Commons map by TUBS; region colours changed for this presentation", CM("Sumy Oblast in Ukraine (de jure).svg")],
+  "images/map-sumy.png":["Map with the Sumy Region: Wikimedia Commons map by TUBS; colours changed for this presentation", CM("Sumy Oblast in Ukraine (de jure).svg")],
+  "images/krolevets-illustration.jpg":["Krolevets towels — AI-generated illustration (provided by the presenter; not a photo of a real object)",""],
+  "images/pottery-illustration.jpg":["Painted pottery — AI-generated illustration (provided by the presenter; not a photo of a real object)",""],
+  "images/pysanky-illustration.jpg":["Pysanky in a basket — AI-generated illustration (provided by the presenter; not a photo of a real object)",""],
+  "images/konotop-scheme.jpg":["Battle of Konotop scheme — Wikimedia Commons", CM("KON EN 01.JPG")],
+  "images/baturyn-citadel.jpg":["Baturyn citadel — Håkan Henriksson (Narking), Wikimedia Commons", CM("Baturyn-fortress-2010-08-08.jpg")],
+  "images/rozumovsky-palace.jpg":["Rozumovsky Palace — Vi Ko, Wikimedia Commons", CM("Razumovsky Palace. Palladian style of Ukraine 03.jpg")],
+  "images/carols.jpg":["Carol singers — photo from znaj.ua (chosen by the presenter for a school presentation)","https://znaj.ua/images/2020/01/13/pNhcafDyRWcHfhvne4vp4tyAi3CfToX3YclCQdhx.jpeg"],
+  "images/korovai.jpg":["Korovai — AI-generated illustration (provided by the presenter)",""],
+  "images/pentecost.jpg":["Green Holidays — AI-generated illustration (provided by the presenter)",""],
+  "images/dog-wedding.jpg":["Once Upon a Dog (Soyuzmultfilm, 1982, dir. Eduard Nazarov) — film still","https://loveopium.ru/content/2019/04/volk/05.jpg"],
+  "images/mavka.jpg":["Mavka — Sofiia Karaffa-Korbut, triptych ‘The Forest Song’ (right panel), via zbruc.eu","https://zbruc.eu/sites/default/files/pictures/lu_lisova_pisnya_-_tryptix.jpg"],
+  "images/hopak.jpg":["Hopak, Virsky Ensemble — Wikimedia Commons", CM("Virsky Hopak.JPG")],
+  "images/first-last-bell.jpg":["School bell ceremony — photo from 24tv.ua (chosen by the presenter)","https://24tv.ua/resources/photos/news/202405/2563513.jpg"],
+  "images/graduation-waltz.jpg":["Graduation waltz — photo from abo.media, cropped (chosen by the presenter)","https://cdn.abo.media/upload/article/bccwakkrdt1gjc6s1fqw.jpg"],
+  "images/sumdu.jpg":["Sumy State University — Wikimedia Commons", CM("Sumdu.jpg")],
+  "images/yt-shchedryk.jpg":["Shchedryk — video preview frame (YouTube)","https://www.youtube.com/watch?v=TPhDRMr6ttM"],
+  "images/bandura.jpg":["Bandura players — photo from photographers.ua (chosen by the presenter)","https://i.photographers.ua/images/pictures/15920/img_6578_lr_ps_min.jpg"],
+  "images/usyk.jpg":["Oleksandr Usyk — photo provided by the presenter (photographer and licence not stated)",""],
+  "images/bubka.jpg":["Serhiy Bubka — photo provided by the presenter (photographer and licence not stated)",""],
+  "images/shevchenko.jpg":["Andriy Shevchenko — photo provided by the presenter (photographer and licence not stated)",""],
+  "images/yt-cossacks.jpg":["How the Cossacks Played Football (Kyivnaukfilm, 1970) — video preview frame (YouTube)","https://www.youtube.com/watch?v=vuqTBP8HBMw"],
+  "images/psel.jpg":["The Psel river near Lebedyn — Wikimedia Commons", CM("Псел на просторах Лебединщини.jpg")],
+  "images/field.jpg":["Background: blue sky, golden wheat, poppies and cornflowers — AI-generated illustration (provided by the presenter)",""],
+  "images/hero-field.jpg":["Title background: sky, wheat, poppies and cornflowers — AI-generated illustration",""],
+  "images/field-background.jpg":["Section background — AI-generated illustration",""]
+};
+const OTHER_SOURCES = [
+  ["Videos", [
+    ["Krolevets weaving — Suspilne Sumy, Viktoriia Hramm, 16 March 2025","https://www.youtube.com/watch?v=jfE9TMHPwgg"],
+    ["Rozumovsky Palace tour (YouTube)","https://www.youtube.com/watch?v=ARrqlZ-s1AI"],
+    ["Evenings on a Farm near Dikanka (1961, dir. Oleksandr Rou) (YouTube)","https://www.youtube.com/watch?v=YrsqKUD3Be8"],
+    ["Once Upon a Dog (Soyuzmultfilm, 1982, dir. Eduard Nazarov), based on the Ukrainian folk tale ‘Sirko’ (YouTube)","https://www.youtube.com/watch?v=yTAB18eG4a8"],
+    ["Hopak — Pavlo Virsky Ensemble (YouTube)","https://www.youtube.com/watch?v=p7gTiA4ErkI"],
+    ["Shchedryk — full performance (YouTube; performer not yet confirmed)","https://www.youtube.com/watch?v=TPhDRMr6ttM"],
+    ["Lvivyanky Bandura Ensemble — Pro ridnyi Lviv (YouTube)","https://www.youtube.com/watch?v=i4BppNUJ9vQ"],
+    ["How the Cossacks Played Football (Kyivnaukfilm, 1970) (YouTube)","https://www.youtube.com/watch?v=vuqTBP8HBMw"]]],
+  ["Facts", [
+    ["Baturyn: estimates of victims (Encyclopedia of Ukraine: 11,000–14,000)","https://www.encyclopediaofukraine.com/display.asp?linkpath=pages%5CB%5CA%5CBaturyn.htm"],
+    ["Sack of Baturyn: estimates 9,000–15,000 (Wikipedia)","https://en.wikipedia.org/wiki/Sack_of_Baturyn"],
+    ["Hetman’s Capital National Reserve (official)","https://baturin-capital.gov.ua/"],
+    ["How the Cossacks Played Football — official film catalogue","https://usfa.gov.ua/movie-catalog/yak-kozaky-u-futbol-graly-i10013"],
+    ["Bubka: first 6 m jump — World Athletics","https://worldathletics.org/news/feature/sergey-bubka-first-six-metre-pole-vault"]]]
+];
+
+/* 4. Region labels on the map: [name, left %, top %], checked on the map image. */
+const REGIONS = [["Volyn",17.19,18.19],["Rivne",26.30,20.12],["Zhytomyr",36.15,24.92],["Kyiv",45.05,34.06],["Chernihiv",55.21,16.64],["Poltava",63.75,35.99],["Kharkiv",77.86,35.99],["Luhansk",91.41,44.74],["Donetsk",84.64,53.41],["Zaporizhzhia",73.70,61.92],["Dnipropetrovsk",72.92,49.54],["Cherkasy",52.34,41.25],["Kirovohrad",54.17,50.54],["Mykolaiv",54.69,61.92],["Kherson",61.98,70.82],["Odesa",44.79,61.92],["Vinnytsia",37.19,43.58],["Khmelnytskyi",28.65,37.77],["Ternopil",21.09,38.31],["Lviv",13.02,33.67],["Ivano-Frankivsk",15.62,46.44],["Zakarpattia",8.85,50.54],["Chernivtsi",23.44,51.47],["Crimea",66.15,85.91]];
+
+/* =====================================================================
+   Engine — no need to edit below
+   ===================================================================== */
+const $=s=>document.querySelector(s);
+const slides=[...document.querySelectorAll(".slide")];
+const N=slides.length; let cur=0;
+const deckMQ=matchMedia("(min-width:900px) and (min-height:560px)");
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const isFile=location.protocol==="file:";
+if(isFile) $("#fileWarn").style.display="block";
+
+/* ---- try a list of files, call back with the first one that loads ---- */
+function firstImage(files,cb){ let i=0; const t=new Image(); t.onload=()=>cb(files[i-1]); t.onerror=()=>next(); const next=()=>{ if(i<files.length) t.src=files[i++]; else cb(null); }; next(); }
+const USED={};
+
+/* ---- painted field (used until an approved background image is added) ---- */
+function rand(seed){ let s=seed>>>0||1; return ()=>((s=Math.imul(s^s>>>15,1|s)+0x6D2B79F5|0,(s^s>>>14)>>>0)/4294967296); }
+function paintField(W,H,seed){
+  const c=document.createElement("canvas"); c.width=W; c.height=H; const g=c.getContext("2d"); const r=rand(seed);
+  const hz=H*.62;
+  let sky=g.createLinearGradient(0,0,0,hz); sky.addColorStop(0,"#4f9be0"); sky.addColorStop(.55,"#8fc6ef"); sky.addColorStop(1,"#e6f4fc");
+  g.fillStyle=sky; g.fillRect(0,0,W,hz+2);
+  g.save(); g.filter="blur("+Math.round(W/90)+"px)";
+  for(let i=0;i<9;i++){ const x=r()*W,y=H*(.08+r()*.38),w=W*(.12+r()*.18); g.fillStyle="rgba(255,255,255,"+(.5+r()*.35)+")";
+    for(let k=0;k<5;k++){ g.beginPath(); g.ellipse(x+(k-2)*w*.22,y+(r()-.5)*w*.08,w*(.18+r()*.12),w*(.08+r()*.05),0,0,7); g.fill(); } }
+  g.restore();
+  let fld=g.createLinearGradient(0,hz,0,H); fld.addColorStop(0,"#e9c86e"); fld.addColorStop(.5,"#d9a843"); fld.addColorStop(1,"#b98329");
+  g.fillStyle=fld; g.fillRect(0,hz,W,H-hz);
+  const items=[];
+  const rows=150;
+  for(let j=0;j<rows;j++){ const t=j/rows, y=hz+Math.pow(t,1.6)*(H-hz)*1.06, s=.25+t*2.6, n=Math.round(W/(5*s));
+    for(let i=0;i<n;i++){ const x=r()*W, k=r(); items.push({y,x,s,k:k<.02*(.3+t)?"poppy":k<.033*(.3+t)?"corn":"wheat",rr:r()}); } }
+  items.sort((a,b)=>a.y-b.y);
+  for(const it of items){ const {x,y,s}=it;
+    if(it.k==="wheat"){ const h=22*s, lean=(it.rr-.5)*6*s;
+      g.strokeStyle=it.rr>.5?"#c9932f":"#b47d22"; g.lineWidth=Math.max(.6,.9*s); g.beginPath(); g.moveTo(x,y); g.quadraticCurveTo(x+lean*.3,y-h*.6,x+lean,y-h); g.stroke();
+      g.fillStyle=it.rr>.3?"#f0cf72":"#e3b551"; g.beginPath(); g.ellipse(x+lean,y-h-3.5*s,1.6*s,4.6*s,lean*.02,0,7); g.fill(); }
+    else if(it.k==="poppy"){ const h=26*s, R=6.2*s; g.strokeStyle="#5f7d2c"; g.lineWidth=Math.max(.6,.7*s); g.beginPath(); g.moveTo(x,y); g.lineTo(x+(it.rr-.5)*3*s,y-h); g.stroke();
+      g.fillStyle="#d7261e"; for(let p=0;p<4;p++){ const a=p*Math.PI/2+it.rr; g.beginPath(); g.ellipse(x+Math.cos(a)*R*.55,y-h+Math.sin(a)*R*.55,R*.75,R*.6,a,0,7); g.fill(); }
+      g.fillStyle="#2a1a12"; g.beginPath(); g.arc(x,y-h,R*.28,0,7); g.fill(); }
+    else { const h=24*s, R=5*s; g.strokeStyle="#5f7d2c"; g.lineWidth=Math.max(.6,.6*s); g.beginPath(); g.moveTo(x,y); g.lineTo(x,y-h); g.stroke();
+      g.fillStyle="#3f6fd8"; for(let p=0;p<8;p++){ const a=p*Math.PI/4; g.beginPath(); g.ellipse(x+Math.cos(a)*R*.7,y-h+Math.sin(a)*R*.7,R*.45,R*.22,a,0,7); g.fill(); }
+      g.fillStyle="#22348a"; g.beginPath(); g.arc(x,y-h,R*.25,0,7); g.fill(); } }
+  return c.toDataURL("image/jpeg",.88);
+}
+function setBackgrounds(){
+  const W=Math.min(2400,Math.round(innerWidth*Math.min(devicePixelRatio||1,1.6))), H=Math.round(W*innerHeight/innerWidth);
+  firstImage(IMAGES.field.files,f=>{ USED.field=f; $("#field").style.backgroundImage="url('"+(f||paintField(W,H,7))+"')"; });
+  firstImage(IMAGES.hero.files,f=>{ USED.hero=f; $("#heroBg").style.backgroundImage="url('"+(f||paintField(W,H,21))+"')"; buildSources(); });
+}
+
+/* ---- card images ---- */
+const ART={
+ boxing:'<svg viewBox="0 0 100 100"><g fill="#f5c84b"><path d="M34 40c0-15 10-24 25-24s25 9 25 23v14c0 11-8 19-19 19H47c-8 0-13-6-13-13z"/><path d="M36 46c-9-2-16 3-16 11s7 13 16 11z"/><rect x="40" y="74" width="40" height="14" rx="3"/></g><path d="M36 52c4 6 9 8 15 7" stroke="#14305e" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M44 81h32" stroke="#14305e" stroke-width="3"/></svg>',
+ pole:'<svg viewBox="0 0 100 100" fill="none" stroke="#f5c84b" stroke-width="5" stroke-linecap="round"><path d="M10 92 L88 18"/><circle cx="58" cy="22" r="7" fill="#f5c84b" stroke="none"/><path d="M56 30 L48 50 L30 58 M48 50 L62 62 M52 38 L70 34"/><path d="M14 80 h20" stroke-width="3"/></svg>',
+ football:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="#fff" stroke="#f5c84b" stroke-width="4"/><path d="M50 30l15 11-6 18H41l-6-18z" fill="#14305e"/><path d="M50 12v18M65 41l20-6M59 59l12 16M41 59L29 75M35 41l-20-6" stroke="#14305e" stroke-width="3"/></svg>'
+};
+document.querySelectorAll("[data-art]").forEach(a=>{ a.innerHTML=ART[a.dataset.art]+'<span class="ini">'+a.dataset.ini+'</span>'; });
+document.querySelectorAll("img[data-img]").forEach(img=>{
+  const key=img.dataset.img, m=IMAGES[key], box=img.closest(".ph,.mini,.bg");
+  img.alt=(m.title||"")+(m.text?" — "+m.text:"");
+  if(m.pos) img.style.objectPosition=m.pos;
+  if(m.fit==="contain") img.classList.add("contain");
+  firstImage(m.files,f=>{
+    USED[key]=f;
+    if(f){ img.src=f; }
+    else if(m.art){ box&&box.classList.add("use-art"); }
+    else if(box){ box.classList.add("is-missing"); const n=box.querySelector(".notice"); if(n) n.innerHTML="Photo file missing:<br><b>"+m.files[0]+"</b>"; }
+    buildSources();
+  });
+  img.addEventListener("click",()=>openLB(img,m));
+});
+
+/* ---- map ---- */
+const rl=$("#rlabels");
+REGIONS.forEach(([n,x,y])=>{ const s=document.createElement("span"); s.textContent=n;
+  s.style.left=x+"%"; s.style.top=y+"%"; rl.appendChild(s); });
+firstImage(["images/map-regions.png"],f=>{ USED.mapRegions=f; if(f) $("#mapRegions").src=f; else $("#mapRegions").style.display="none"; buildSources(); });
+firstImage(["images/map-sumy.png"],f=>{ USED.mapSumy=f; if(f) $("#mapSumy").src=f; else $("#mapview").classList.add("is-missing"); buildSources(); });
+let mapTimers=[]; let mapOn=false;
+function startMap(){
+  const s=$("#s1"); mapOn=true; mapTimers.forEach(clearTimeout); mapTimers=[];
+  s.classList.remove("hl","zoom","named"); s.classList.add("map-on");
+  if(reduce){ s.classList.add("hl","zoom","named"); return; }
+  mapTimers.push(setTimeout(()=>s.classList.add("hl"),1900));
+  mapTimers.push(setTimeout(()=>s.classList.add("zoom"),3000));
+  mapTimers.push(setTimeout(()=>s.classList.add("named"),5000));
+}
+function resetMap(){ mapTimers.forEach(clearTimeout); mapTimers=[]; mapOn=false; $("#s1").classList.remove("map-on","hl","zoom","named"); }
+
+/* ---- menu, dots, sources ---- */
+const ml=$("#menuList"), dots=$("#dots");
+slides.forEach((s,i)=>{ const li=document.createElement("li"), b=document.createElement("button"); b.textContent=s.dataset.title; b.onclick=()=>{go(i);toggle("#menu",false)}; li.appendChild(b); ml.appendChild(li);
+  const d=document.createElement("button"); d.setAttribute("aria-label",(i+1)+". "+s.dataset.title); d.onclick=()=>go(i); dots.appendChild(d); });
+function esc(t){return String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function buildSources(){
+  const used=new Set(Object.values(USED).filter(Boolean)); if(USED.mapRegions) used.add(USED.mapRegions); if(USED.mapSumy) used.add(USED.mapSumy);
+  const li=([t,u])=>u?`<li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)}</a></li>`:`<li>${esc(t)}</li>`;
+  const imgs=[...used].map(f=>CREDITS[f]||[f.replace("images/","")+" — added by the presenter",""]);
+  $("#sources").innerHTML="<strong>Sources & credits</strong><h4>Images used on this computer</h4><ul>"+imgs.map(li).join("")+"</ul>"+
+    OTHER_SOURCES.map(([h,items])=>`<h4>${esc(h)}</h4><ul>${items.map(li).join("")}</ul>`).join("")+
+    `<p style="font-size:12px;color:#4a5568">Full list with licences: sources-and-media.html in the presentation folder.</p>`;
+}
+
+/* ---- navigation ---- */
+function mark(i){ $("#count").textContent=(i+1)+" / "+N; [...dots.children].forEach((d,j)=>d.setAttribute("aria-current",j===i)); [...ml.querySelectorAll("button")].forEach((d,j)=>d.setAttribute("aria-current",j===i));
+  const bp=slides[i].dataset.bg; if(bp) $("#field").style.backgroundPosition=bp; }
+function go(i){
+  i=Math.max(0,Math.min(N-1,i)); if(i!==cur) closeVideo(); const from=cur; cur=i;
+  if(document.body.classList.contains("deck")){ slides.forEach((s,j)=>s.classList.toggle("active",j===i)); slides[i].scrollTop=0; }
+  else slides[i].scrollIntoView({behavior:reduce?"auto":"smooth"});
+  if(i!==0 && from===0) setTimeout(resetMap,450);
+  mark(i); try{history.replaceState(null,"","#s"+(i+1));}catch(e){}
+}
+function nextStep(){ if(cur===0 && document.body.classList.contains("deck") && !mapOn){ startMap(); return; } go(cur+1); }
+function prevStep(){ if(cur===0 && mapOn){ resetMap(); return; } go(cur-1); }
+function setMode(){ const deck=deckMQ.matches; document.body.classList.toggle("deck",deck); slides.forEach((s,j)=>s.classList.toggle("active",!deck||j===cur)); if(!deck){ $("#s1").classList.add("map-on","hl","named"); } }
+deckMQ.addEventListener?deckMQ.addEventListener("change",setMode):deckMQ.addListener(setMode);
+const io=new IntersectionObserver(es=>{ if(document.body.classList.contains("deck")) return; es.forEach(e=>{ if(e.isIntersecting){ const i=slides.indexOf(e.target); if(i!==cur){closeVideo();cur=i;mark(i);} } }); },{threshold:.35});
+slides.forEach(s=>io.observe(s));
+$("#prev").onclick=prevStep; $("#next").onclick=nextStep;
+$("#explore").onclick=()=>{ if(document.body.classList.contains("deck")) startMap(); else $(".mapstage").scrollIntoView({behavior:reduce?"auto":"smooth"}); };
+document.querySelectorAll('[data-go="next"]').forEach(b=>b.onclick=()=>go(cur+1));
+function toggle(sel,force){ const p=$(sel), open=force===undefined?!p.classList.contains("open"):force; p.classList.toggle("open",open);
+  (sel==="#menu"?$("#menuBtn"):$("#srcBtn")).setAttribute("aria-expanded",open); if(open) toggle(sel==="#menu"?"#sources":"#menu",false); }
+$("#menuBtn").onclick=()=>toggle("#menu"); $("#srcBtn").onclick=()=>toggle("#sources");
+document.addEventListener("click",e=>{ if(!e.target.closest(".panel,#menuBtn,#srcBtn")){ $("#menu").classList.remove("open"); $("#sources").classList.remove("open"); } });
+$("#fsBtn").onclick=()=>{ try{ document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen(); }catch(e){} };
+
+/* ---- lightbox (no source text on screen) ---- */
+function openLB(img,m){ if(!img.src) return; const lb=$("#lb"); lb.querySelector("img").src=img.src; lb.querySelector("img").alt=img.alt;
+  lb.querySelector(".lbcap").innerHTML=`<b>${esc(m.title||"")}</b><span>${esc(m.text||"")}</span>`; lb.classList.add("open"); lb.querySelector(".close").focus(); }
+function closeLB(){ $("#lb").classList.remove("open"); }
+
+/* ---- videos (YouTube IFrame API, needs START.bat → http://127.0.0.1) ---- */
+let SAVED={}; try{ SAVED=JSON.parse(localStorage.getItem("uuc-clips")||"{}"); }catch(e){}
+if(false) fetch("clips.json",{cache:"no-store"}).then(r=>r.ok?r.json():{}).then(j=>{ SAVED=Object.assign({},SAVED,j||{}); }).catch(()=>{});
+const clipOf=k=>{ const c=Object.assign({},CLIPS[k],SAVED[k]||{}); if(LIMIT && !c.full && c.end==null) c.end=(c.start||0)+LIMIT; return c; };
+let ytP=null, player=null, curKey=null;
+function loadYT(){ if(ytP) return ytP; ytP=new Promise((res,rej)=>{ if(window.YT&&YT.Player) return res(); window.onYouTubeIframeAPIReady=()=>res();
+  const s=document.createElement("script"); s.src="https://www.youtube.com/iframe_api"; s.onerror=()=>{ytP=null;rej(new Error("load"));}; document.head.appendChild(s);
+  setTimeout(()=>{ if(!(window.YT&&YT.Player)){ ytP=null; rej(new Error("timeout")); } },15000); }); return ytP; }
+const fmt=s=>s==null?"—":Math.floor(s/60)+":"+String(Math.floor(s%60)).padStart(2,"0");
+function vmsg(html){ $("#vid .frame").innerHTML=`<div class="msg"><div>${html}</div></div>`; }
+function openVideo(key){
+  const c=clipOf(key); curKey=key; const v=$("#vid"), link=v.querySelector(".vlink");
+  v.querySelector(".vtitle").textContent=c.title+(c.full?" · full performance":(c.end==null&&!c.start?"":"  ·  "+fmt(c.start||0)+"–"+(c.end==null?"end":fmt(c.end))));
+  link.href="https://www.youtube.com/watch?v="+c.id+(c.start?"&t="+c.start+"s":"");
+  $("#clipEd").classList.remove("open");
+  v.classList.add("open"); v.querySelector(".close").focus();
+  if(isFile){ vmsg("YouTube does not play videos inside a page opened as a file (error 153).<br>Open the presentation from its web link, or use “Open on YouTube”."); return; }
+  vmsg("Loading the video…");
+  loadYT().then(()=>{
+    if(curKey!==key || !v.classList.contains("open")) return;
+    $("#vid .frame").innerHTML='<div id="ytp"></div>';
+    const pv={autoplay:0,rel:0,playsinline:1,modestbranding:1,controls:1,fs:1,origin:location.origin};
+    if(c.start!=null) pv.start=Math.floor(c.start); if(c.end!=null) pv.end=Math.ceil(c.end);
+    player=new YT.Player("ytp",{videoId:c.id,playerVars:pv,events:{
+      onReady:()=>{},
+      onError:e=>{ const code=e.data; vmsg("This video cannot play inside the presentation (YouTube code "+code+").<br>Please use “Open on YouTube”."); }
+    }});
+  }).catch(()=>vmsg("The video player could not load. Check the internet connection, or use “Open on YouTube”."));
+}
+function closeVideo(){ const v=$("#vid"); if(!v.classList.contains("open")) return; try{ player&&player.destroy(); }catch(e){} player=null; curKey=null; v.querySelector(".frame").innerHTML=""; v.classList.remove("open"); }
+document.querySelectorAll("[data-video]").forEach(b=>b.onclick=()=>openVideo(b.dataset.video));
+document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>{closeVideo();closeLB();});
+["#lb","#vid"].forEach(s=>$(s).addEventListener("click",e=>{ if(e.target===e.currentTarget){closeVideo();closeLB();} }));
+
+/* ---- clip editor ---- */
+let draft={};
+function edInfo(){ $("#cInfo").textContent="Clip: "+fmt(draft.start)+" – "+fmt(draft.end)+(draft.saved?" · saved":""); }
+if($("#clipBtn")) $("#clipBtn").onclick=()=>{ const c=clipOf(curKey); draft={start:c.start,end:c.end}; $("#clipEd").classList.toggle("open"); edInfo(); };
+const now=()=>{ try{ return Math.round(player.getCurrentTime()); }catch(e){ return null; } };
+$("#cStart").onclick=()=>{ draft.start=now(); draft.saved=false; edInfo(); };
+$("#cEnd").onclick=()=>{ draft.end=now(); draft.saved=false; edInfo(); };
+$("#cTest").onclick=()=>{ if(!player) return; try{ player.loadVideoById({videoId:CLIPS[curKey].id,startSeconds:draft.start||0,endSeconds:draft.end||undefined}); }catch(e){} };
+$("#cSave").onclick=()=>{ if(draft.start!=null && draft.end!=null && draft.end<=draft.start){ $("#cInfo").textContent="The end must be after the start."; return; }
+  SAVED[curKey]={start:draft.start,end:draft.end}; try{ localStorage.setItem("uuc-clips",JSON.stringify(SAVED)); }catch(e){}
+  fetch("api/clips",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(SAVED)}).then(r=>{ draft.saved=r.ok; edInfo(); if(!r.ok) $("#cInfo").textContent+=" (only in this browser)"; }).catch(()=>{ draft.saved=true; edInfo(); $("#cInfo").textContent+=" (only in this browser)"; });
+  $("#vid .vtitle").textContent=CLIPS[curKey].title+"  ·  "+fmt(draft.start||0)+"–"+fmt(draft.end); };
+$("#cReset").onclick=()=>{ delete SAVED[curKey]; try{ localStorage.setItem("uuc-clips",JSON.stringify(SAVED)); }catch(e){} fetch("api/clips",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(SAVED)}).catch(()=>{}); const c=clipOf(curKey); draft={start:c.start,end:c.end}; edInfo(); };
+
+/* ---- keyboard: ignored while a video or photo is open ---- */
+document.addEventListener("keydown",e=>{
+  const overlay=$("#vid").classList.contains("open")||$("#lb").classList.contains("open");
+  if(e.key==="Escape"){ closeVideo(); closeLB(); toggle("#menu",false); toggle("#sources",false); return; }
+  if(overlay||e.altKey||e.ctrlKey||e.metaKey) return;
+  if(/INPUT|TEXTAREA|SELECT|IFRAME/.test(document.activeElement.tagName)) return;
+  if(!document.body.classList.contains("deck") && [" ","PageDown","PageUp"].includes(e.key)) return;
+  if(["ArrowRight","PageDown"," "].includes(e.key)){ e.preventDefault(); nextStep(); }
+  else if(["ArrowLeft","PageUp"].includes(e.key)){ e.preventDefault(); prevStep(); }
+  else if(e.key==="Home") go(0); else if(e.key==="End") go(N-1);
+  else if(e.key==="f"||e.key==="F") $("#fsBtn").click();
+});
+
+/* ---- start ---- */
+const h=parseInt((location.hash.match(/#s(\d)/)||[])[1]||"1",10)-1; cur=Math.max(0,Math.min(N-1,h));
+setMode(); mark(cur); setBackgrounds(); buildSources();
+let rT; addEventListener("resize",()=>{ clearTimeout(rT); rT=setTimeout(setBackgrounds,600); });
+</script>
+</body>
+</html>
